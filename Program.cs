@@ -8,6 +8,7 @@ using System.Threading;
 var availableNetworks = NativeWifi.EnumerateBssNetworks();
 var enumInterfaces = NativeWifi.EnumerateInterfaces();
 var enumInterfacesCon = NativeWifi.EnumerateInterfaceConnections();
+string connectedBSSID = GetBSSID();
 
 static string GetBSSID()
 {
@@ -74,6 +75,14 @@ static void GetInterfacesCon(IEnumerable<InterfaceConnectionInfo> enumInterfaces
         Console.WriteLine($"DESCRIPTION={i.Description}");
     }
 }
+static void PrintHelp()
+{
+	Console.WriteLine("Use one of the following parameters e.g. rssi-printer.exe -rssi");
+    Console.WriteLine("-rssi\t\tshows rssi value");
+    Console.WriteLine("-interfaces\tshows interface information");
+    Console.WriteLine("-interfacescon\tshows interface connection information");
+    Console.WriteLine("-networks\tshows available network information");
+}
 static void RssiDebugLoop(IEnumerable<BssNetworkPack> availableNetworks, string connectedBSSID)
 {
     while (true)
@@ -82,37 +91,35 @@ static void RssiDebugLoop(IEnumerable<BssNetworkPack> availableNetworks, string 
         Thread.Sleep(1000);
     }
 }
-string connectedBSSID = GetBSSID();
 
-if (args != null)
+if (args.Length != 0)
 {
-    if (args[0] == "-rssi")
-    {
-        Console.Write(GetRssi(availableNetworks, connectedBSSID));
-    }
+	if (args[0] == "-rssi")
+	{
+		Console.Write(GetRssi(availableNetworks, connectedBSSID));
+	}
 
 	if (args[0] == "-interfaces")
 	{
 		GetInterfaces(enumInterfaces);
 	}
-	
+
 	if (args[0] == "-interfacescon")
 	{
 		GetInterfacesCon(enumInterfacesCon);
 	}
-	
+
 	if (args[0] == "-networks")
 	{
 		GetEnumNetworks(availableNetworks);
 	}
 	if (args[0] == "-h")
 	{
-		Console.WriteLine("-rssi\t\tshows rssi value");
-		Console.WriteLine("-interfaces\tshows interface information");
-		Console.WriteLine("-interfacescon\tshows interface connection information");
-		Console.WriteLine("-networks\tshows available network information");
+		PrintHelp();
 	}
 }
+else
+	PrintHelp();
 
 //Debbuging 
 //RssiDebugLoop(availableNetworks, connectedBSSID);

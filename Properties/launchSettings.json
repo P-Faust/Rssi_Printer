@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Rssi_Printer": {
-      "commandName": "Project",
-      "commandLineArgs": "-networks"
+      "commandName": "Project"
     }
   }
 }
